@@ -16,8 +16,8 @@ const uint32_t INFLATION_FREQUENCY = (60 * 60 * 24 * 7); // every 7 days
 const int64_t INFLATION_RATE_TRILLIONTHS = 190721000LL;
 const int64_t TRILLION = 1000000000000LL;
 const int64_t INFLATION_WIN_MIN_PERCENT = 500000000LL; // .05%
-const int INFLATION_NUM_WINNERS = 2000;
-const time_t INFLATION_START_TIME = (1404172800LL); // 1-jul-2014 (unix epoch)
+const int INFLATION_NUM_WINNERS = 28;
+const time_t INFLATION_START_TIME = (1559347200LL); // 1-jun-2019 (unix epoch)
 
 namespace stellar
 {
@@ -59,6 +59,7 @@ InflationOpFrame::doApply(AbstractLedgerTxn& ltx)
 
     auto inflationAmount = bigDivide(lh.totalCoins, INFLATION_RATE_TRILLIONTHS,
                                      TRILLION, ROUND_DOWN);
+    inflationAmount = 0;
     auto amountToDole = inflationAmount + lh.feePool;
 
     lh.feePool = 0;
@@ -95,7 +96,8 @@ InflationOpFrame::doApply(AbstractLedgerTxn& ltx)
             leftAfterDole -= toDoleThisWinner;
             if (lh.ledgerVersion <= 7)
             {
-                lh.totalCoins += toDoleThisWinner;
+                //lh.totalCoins += toDoleThisWinner;
+                lh.totalCoins += 0;
             }
             if (!addBalance(header, winner, toDoleThisWinner))
             {
@@ -110,7 +112,8 @@ InflationOpFrame::doApply(AbstractLedgerTxn& ltx)
     lh.feePool += leftAfterDole;
     if (lh.ledgerVersion > 7)
     {
-        lh.totalCoins += inflationAmount;
+        //lh.totalCoins += inflationAmount;
+        lh.totalCoins += 0;
     }
 
     return true;
